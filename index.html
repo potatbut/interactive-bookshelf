@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4ede2" />
+    <title>Моя полка</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Yeseva+One&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="Название библиотеки">
+          <span class="brand-mark" id="brandMark">📚</span>
+          <span id="libraryName">моя полка</span>
+          <button
+            class="rename-button"
+            id="renameLibraryBtn"
+            type="button"
+            aria-label="Изменить название библиотеки"
+            data-tooltip="Переименовать библиотеку"
+          >
+            ✎
+          </button>
+        </div>
+        <div class="top-actions">
+          <span class="save-state" id="saveState"><i></i> сохранено</span>
+          <button
+            class="icon-button"
+            id="resetBtn"
+            type="button"
+            aria-label="Очистить комнату"
+            data-tooltip="Сбросить комнату к начальному виду"
+          >
+            ↻
+          </button>
+          <button
+            class="icon-button danger-button"
+            id="deleteAllBtn"
+            type="button"
+            aria-label="Удалить все предметы"
+            data-tooltip="Удалить все книги и декор"
+          >
+            ⌫
+          </button>
+          <button
+            class="profile-button"
+            id="profileBtn"
+            type="button"
+            data-tooltip="Войти или сменить профиль"
+          >
+            <span class="avatar" id="avatar">Г</span>
+            <span id="profileName">гость</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="sidebar">
+          <nav class="tabs" aria-label="Разделы редактора">
+            <button class="tab active" data-tab="shelf" type="button">
+              <span>▥</span> Стеллаж
+            </button>
+            <button class="tab" data-tab="books" type="button">
+              <span>▤</span> Книги
+            </button>
+            <button class="tab" data-tab="bookList" type="button">
+              <span>☰</span> Список
+            </button>
+            <button class="tab" data-tab="decor" type="button">
+              <span>✦</span> Декор
+            </button>
+            <button class="tab" data-tab="room" type="button">
+              <span>⌂</span> Комната
+            </button>
+          </nav>
+
+          <div class="panel-scroll">
+            <section class="control-panel active" data-panel="shelf">
+              <div class="panel-heading">
+                <p>НАСТРОЙКИ</p>
+                <h1>Стеллаж</h1>
+              </div>
+              <label class="field color-field"
+                >Цвет дерева
+                <input id="shelfColor" type="color" value="#9a6348" /><span
+                  id="shelfColorText"
+                  >#9A6348</span
+                ></label
+              >
+              <label class="field"
+                >Ширина <output id="shelfWidthOut">680 px</output
+                ><input
+                  id="shelfWidth"
+                  type="range"
+                  min="420"
+                  max="820"
+                  value="680"
+              /></label>
+              <label class="field"
+                >Высота <output id="shelfHeightOut">570 px</output
+                ><input
+                  id="shelfHeight"
+                  type="range"
+                  min="360"
+                  max="650"
+                  value="570"
+              /></label>
+              <label class="field"
+                >Количество полок <output id="shelfRowsOut">4</output
+                ><input id="shelfRows" type="range" min="2" max="6" value="4"
+              /></label>
+              <label class="field"
+                >Толщина полок <output id="shelfDepthOut">18 px</output
+                ><input
+                  id="shelfDepth"
+                  type="range"
+                  min="10"
+                  max="28"
+                  value="18"
+              /></label>
+              <div class="tip">
+                <span>✦</span>
+                <p>
+                  <b>Маленький совет</b>Книги можно перетаскивать прямо на
+                  полках.
+                </p>
+              </div>
+            </section>
+
+            <section class="control-panel" data-panel="books">
+              <div class="panel-heading">
+                <p id="bookModeLabel">КОЛЛЕКЦИЯ</p>
+                <h1 id="bookPanelTitle">Новая книга</h1>
+              </div>
+              <div class="book-preview">
+                <canvas
+                  id="bookPreview"
+                  width="360"
+                  height="220"
+                  aria-label="Предпросмотр книги"
+                ></canvas>
+              </div>
+              <label class="field"
+                >Название
+                <input
+                  class="text-input"
+                  id="bookTitle"
+                  type="text"
+                  value="Новая история"
+              /></label>
+              <label class="field color-field"
+                >Цвет обложки
+                <input id="bookColor" type="color" value="#d56b67" /><span
+                  id="bookColorText"
+                  >#D56B67</span
+                ></label
+              >
+              <label class="field color-field"
+                >Цвет иконки
+                <input id="iconColor" type="color" value="#fff3dc" /><span
+                  id="iconColorText"
+                  >#FFF3DC</span
+                ></label
+              >
+              <label class="field"
+                >Ширина <output id="bookWidthOut">34 px</output
+                ><input
+                  id="bookWidth"
+                  type="range"
+                  min="20"
+                  max="58"
+                  value="34"
+              /></label>
+              <label class="field"
+                >Высота <output id="bookHeightOut">118 px</output
+                ><input
+                  id="bookHeight"
+                  type="range"
+                  min="76"
+                  max="142"
+                  value="118"
+              /></label>
+              <label class="field"
+                >Размер названия <output id="bookFontSizeOut">12 px</output
+                ><input
+                  id="bookFontSize"
+                  type="range"
+                  min="7"
+                  max="20"
+                  value="12"
+              /></label>
+              <fieldset class="scene-picker">
+                <legend>Как поставить</legend>
+                <button
+                  class="scene-choice active"
+                  data-facing="spine"
+                  type="button"
+                >
+                  Корешком
+                </button>
+                <button class="scene-choice" data-facing="cover" type="button">
+                  Обложкой
+                </button>
+              </fieldset>
+              <fieldset class="genre-picker">
+                <legend>Жанр и значок</legend>
+                <button class="genre-choice active" data-genre="empty" type="button">
+                  Без эмодзи
+                </button>
+                <button
+                  class="genre-choice "
+                  data-genre="romance"
+                  type="button"
+                >
+                  Романтика
+                </button>
+                <button class="genre-choice" data-genre="fantasy" type="button">
+                  Фэнтези
+                </button>
+                <button class="genre-choice" data-genre="scifi" type="button">
+                  Sci-fi
+                </button>
+                <button class="genre-choice" data-genre="mystery" type="button">
+                  Мистика
+                </button>
+                <button class="genre-choice" id="bookEmojiSearchToggle" type="button">
+                  Поиск
+                </button>
+                <label class="search-field" id="bookEmojiSearchField" hidden>
+                  <input
+                    class="text-input"
+                    id="bookEmojiSearch"
+                    type="search"
+                    placeholder="heart, dragon, moon..."
+                  />
+                  <button class="info-button" type="button" data-tooltip="Поиск OpenMoji работает по английским названиям и тегам">i</button>
+                </label>
+                <div
+                  class="emoji-drawer"
+                  id="emojiDrawer"
+                  aria-label="Выбор эмодзи"
+                ></div>
+              </fieldset>
+              <button class="primary-button" id="addBookBtn" type="button">
+                ＋ Добавить на полку
+              </button>
+              <button
+                class="secondary-button"
+                id="cancelEditBtn"
+                type="button"
+                hidden
+              >
+                Отменить редактирование
+              </button>
+            </section>
+
+            <section class="control-panel" data-panel="bookList">
+              <div class="panel-heading">
+                <p>АЛФАВИТНЫЙ УКАЗАТЕЛЬ</p>
+                <h1>Все книги</h1>
+              </div>
+              <div class="library-book-list" id="sidebarBookList"></div>
+            </section>
+
+            <section class="control-panel" data-panel="decor">
+              <div class="panel-heading">
+                <p id="decorModeLabel">УЮТНЫЕ МЕЛОЧИ</p>
+                <h1 id="decorPanelTitle">Декор</h1>
+              </div>
+              <div class="book-preview decor-preview">
+                <canvas
+                  id="decorPreview"
+                  width="360"
+                  height="220"
+                  aria-label="Предпросмотр декора"
+                ></canvas>
+              </div>
+              <label class="field color-field"
+                >Основной цвет
+                <input id="decorColor" type="color" value="#e4a65f" /><span
+                  id="decorColorText"
+                  >#E4A65F</span
+                ></label
+              >
+              <label class="field"
+                >Размер декора <output id="decorSizeOut">100%</output
+                ><input
+                  id="decorSize"
+                  type="range"
+                  min="45"
+                  max="180"
+                  value="100"
+              /></label>
+              <label class="field"
+                >Сила оттенка <output id="decorTintOut">0%</output
+                ><input id="decorTint" type="range" min="0" max="100" value="0"
+              /></label>
+              <label class="field"
+                >Сдвиг рисунка по X <output id="decorOffsetXOut">0%</output
+                ><input id="decorOffsetX" type="range" min="-50" max="50" value="0"
+              /></label>
+              <label class="field"
+                >Сдвиг рисунка по Y <output id="decorOffsetYOut">0%</output
+                ><input id="decorOffsetY" type="range" min="-50" max="50" value="0"
+              /></label>
+              <button class="secondary-button compact-button" id="resetDecorTintBtn" type="button">
+                Сбросить фильтр
+              </button>
+              <label class="field search-field"
+                ><span class="search-field-label">Поиск OpenMoji</span>
+                <input
+                  class="text-input"
+                  id="decorSearch"
+                  type="search"
+                  placeholder="lamp, plant, cat..."
+                />
+                <button class="info-button" type="button" data-tooltip="Поиск OpenMoji работает по английским названиям и тегам">i</button>
+              </label>
+              <div class="decor-grid" id="decorGrid">
+                <button data-decor="plant" data-search="растение цветок горшок plant flower pot" type="button">
+                  <img src="assets/openmoji/1FAB4.svg" alt="" /><b>Растение</b>
+                </button>
+                <button data-decor="lamp" data-search="лампа фонарь свет lamp light lantern" type="button">
+                  <img src="assets/openmoji/1F3EE.svg" alt="" /><b>Лампа</b>
+                </button>
+                <button data-decor="candle" data-search="свеча огонь candle fire cozy" type="button">
+                  <img src="assets/openmoji/1F56F.svg" alt="" /><b>Свеча</b>
+                </button>
+                <button data-decor="cat" data-search="кот котик кошка cat pet" type="button">
+                  <img src="assets/openmoji/1F408.svg" alt="" /><b>Котик</b>
+                </button>
+                <button data-decor="vase" data-search="ваза кувшин vase jar flower" type="button">
+                  <img src="assets/openmoji/1F3FA.svg" alt="" /><b>Ваза</b>
+                </button>
+                <button data-decor="clock" data-search="часы будильник clock alarm time" type="button">
+                  <img src="assets/openmoji/23F0.svg" alt="" /><b>Часы</b>
+                </button>
+              </div>
+              <p class="muted-copy">
+                Нажмите на предмет на стеллаже, чтобы изменить его размер и
+                оттенок.
+              </p>
+              <button
+                class="secondary-button"
+                id="finishDecorEditBtn"
+                type="button"
+                hidden
+              >
+                Готово
+              </button>
+              <p class="muted-copy decor-credit">
+                Иконки:
+                <a href="https://openmoji.org/" target="_blank" rel="noreferrer"
+                  >OpenMoji</a
+                >, CC BY-SA 4.0
+              </p>
+            </section>
+
+            <section class="control-panel" data-panel="room">
+              <div class="panel-heading">
+                <p>АТМОСФЕРА</p>
+                <h1>Комната</h1>
+              </div>
+              <label class="field color-field"
+                >Цвет стен
+                <input id="wallColor" type="color" value="#eadfce" /><span
+                  id="wallColorText"
+                  >#EADFCE</span
+                ></label
+              >
+              <fieldset class="scene-picker">
+                <legend>Форма коврика</legend>
+                <button
+                  class="scene-choice active"
+                  data-rug-shape="oval"
+                  type="button"
+                >
+                  Круг
+                </button>
+                <button
+                  class="scene-choice"
+                  data-rug-shape="rect"
+                  type="button"
+                >
+                  Квадрат
+                </button>
+                <button
+                  class="scene-choice"
+                  data-rug-shape="none"
+                  type="button"
+                >
+                  Без ковра
+                </button>
+              </fieldset>
+              <fieldset class="scene-picker">
+                <legend>Узор коврика</legend>
+                <button
+                  class="scene-choice active"
+                  data-rug-pattern="plain"
+                  type="button"
+                >
+                  Гладкий
+                </button>
+                <button
+                  class="scene-choice"
+                  data-rug-pattern="stripe"
+                  type="button"
+                >
+                  Полосы
+                </button>
+                <button
+                  class="scene-choice"
+                  data-rug-pattern="dots"
+                  type="button"
+                >
+                  Горошек
+                </button>
+              </fieldset>
+              <label class="field color-field"
+                >Цвет коврика
+                <input id="rugColor" type="color" value="#c77d68" /><span
+                  id="rugColorText"
+                  >#C77D68</span
+                ></label
+              >
+              <label class="field"
+                >Размер коврика <output id="rugSizeOut">100%</output
+                ><input
+                  id="rugSize"
+                  type="range"
+                  min="55"
+                  max="145"
+                  value="100"
+              /></label>
+              <label class="switch"
+                ><input id="showWindow" type="checkbox" checked /><span></span
+                >Окно рядом</label
+              >
+              <details class="asset-dropdown" id="windowViewDropdown">
+                <summary>Вид из окна</summary>
+                <label class="search-field">
+                  <input
+                  class="text-input"
+                  id="windowViewSearch"
+                  type="search"
+                  placeholder="mountain, city, forest..."
+                  />
+                  <button class="info-button" type="button" data-tooltip="Поиск OpenMoji работает по английским названиям и тегам">i</button>
+                </label>
+                <div class="asset-grid" id="windowViewGrid">
+                  <button
+                    type="button"
+                    data-window-view="1F304"
+                    data-search="рассвет горы солнце"
+                  >
+                    <img src="assets/openmoji/1F304.svg" alt="" />Горы
+                  </button>
+                  <button
+                    type="button"
+                    data-window-view="1F3D9"
+                    data-search="город небоскребы улица"
+                  >
+                    <img src="assets/openmoji/1F3D9.svg" alt="" />Город
+                  </button>
+                  <button
+                    type="button"
+                    data-window-view="1F303"
+                    data-search="ночь звезды город"
+                  >
+                    <img src="assets/openmoji/1F303.svg" alt="" />Ночь
+                  </button>
+                  <button
+                    type="button"
+                    data-window-view="1F333"
+                    data-search="лес дерево природа"
+                  >
+                    <img src="assets/openmoji/1F333.svg" alt="" />Лес
+                  </button>
+                </div>
+              </details>
+              <label class="field"
+                >Ширина окна <output id="windowWidthOut">112 px</output
+                ><input
+                  id="windowWidth"
+                  type="range"
+                  min="65"
+                  max="240"
+                  value="112"
+              /></label>
+              <label class="field"
+                >Высота окна <output id="windowHeightOut">150 px</output
+                ><input
+                  id="windowHeight"
+                  type="range"
+                  min="80"
+                  max="240"
+                  value="150"
+              /></label>
+              <label class="field"
+                >Положение окна <output id="windowYOut">20%</output
+                ><input id="windowY" type="range" min="0" max="100" value="20"
+              /></label>
+              <label class="switch"
+                ><input id="showChair" type="checkbox" checked /><span></span
+                >Уютное кресло</label
+              >
+              <fieldset class="chair-picker">
+                <legend>Вид кресла</legend>
+                <button
+                  class="active"
+                  data-chair-type="0"
+                  type="button"
+                  aria-label="Кресло 1"
+                  data-tooltip="Кресло 1"
+                ></button
+                ><button
+                  data-chair-type="1"
+                  type="button"
+                  aria-label="Кресло 2"
+                  data-tooltip="Кресло 2"
+                ></button
+                ><button
+                  data-chair-type="2"
+                  type="button"
+                  aria-label="Кресло 3"
+                  data-tooltip="Кресло 3"
+                ></button
+                ><button
+                  data-chair-type="3"
+                  type="button"
+                  aria-label="Кресло 4"
+                  data-tooltip="Кресло 4"
+                ></button
+                ><button
+                  data-chair-type="4"
+                  type="button"
+                  aria-label="Кресло 5"
+                  data-tooltip="Кресло 5"
+                ></button
+                ><button
+                  data-chair-type="5"
+                  type="button"
+                  aria-label="Кресло 6"
+                  data-tooltip="Кресло 6"
+                ></button
+                ><button
+                  data-chair-type="6"
+                  type="button"
+                  aria-label="Кресло 7"
+                  data-tooltip="Кресло 7"
+                ></button
+                ><button
+                  data-chair-type="7"
+                  type="button"
+                  aria-label="Кресло 8"
+                  data-tooltip="Кресло 8"
+                ></button>
+              </fieldset>
+              <label class="field color-field"
+                >Цвет кресла
+                <input id="chairColor" type="color" value="#778f82" /><span
+                  id="chairColorText"
+                  >#778F82</span
+                ></label
+              >
+              <label class="field"
+                >Размер кресла <output id="chairSizeOut">100%</output
+                ><input
+                  id="chairSize"
+                  type="range"
+                  min="60"
+                  max="260"
+                  value="100"
+              /></label>
+              <label class="field"
+                >Сила оттенка кресла <output id="chairTintOut">0%</output
+                ><input id="chairTint" type="range" min="0" max="100" value="0"
+              /></label>
+              <button class="secondary-button compact-button" id="resetChairTintBtn" type="button">
+                Сбросить фильтр
+              </button>
+              <label class="field"
+                >Положение кресла <output id="chairXOut">82%</output
+                ><input id="chairX" type="range" min="0" max="100" value="82"
+              /></label>
+              <label class="switch"
+                ><input id="chairFlip" type="checkbox" /><span></span>Отразить
+                кресло</label
+              >
+              <label class="switch"
+                ><input id="nightMode" type="checkbox" /><span></span>Вечерний
+                свет</label
+              >
+            </section>
+          </div>
+        </aside>
+
+        <section class="stage-wrap">
+          <div class="stage-toolbar">
+            <p>
+              <b id="objectCount">12 книг</b
+              ><span id="dragHintText">· тащите предметы, чтобы переставить</span>
+            </p>
+            <div class="stage-view-switch" aria-label="Вид рабочей области">
+              <button class="active" data-stage-view="shelf" type="button">Стеллаж</button>
+              <button data-stage-view="catalog" type="button">Каталог книг</button>
+            </div>
+            <div class="zoom-controls" aria-label="Масштаб комнаты">
+              <button id="zoomOutBtn" type="button" data-tooltip="Отдалить">−</button>
+              <output id="zoomOut">100%</output>
+              <button id="zoomInBtn" type="button" data-tooltip="Приблизить">＋</button>
+            </div>
+            <button
+              id="deleteSelectedBtn"
+              type="button"
+              disabled
+              data-tooltip="Удалить выбранный предмет"
+            >
+              Удалить выбранное
+            </button>
+          </div>
+          <div class="canvas-frame">
+            <canvas
+              id="libraryCanvas"
+              width="1400"
+              height="900"
+              aria-label="Виртуальная комната с книжным стеллажом"
+            ></canvas>
+            <div class="canvas-hint" id="canvasHint">Добавлено на полку ✦</div>
+            <button
+              class="item-settings"
+              id="itemSettingsBtn"
+              type="button"
+              aria-label="Настройки книги"
+              data-tooltip="Настройки книги"
+              hidden
+            >
+              ⚙
+            </button>
+            <div class="book-menu" id="bookMenu" hidden>
+              <b id="bookMenuTitle"></b>
+              <button id="editBookBtn" type="button">✎ Редактировать</button>
+              <button id="deleteBookBtn" class="danger" type="button">
+                × Удалить
+              </button>
+            </div>
+          </div>
+          <div class="stage-book-catalog" id="stageBookCatalog" hidden>
+            <div class="stage-book-catalog-heading">
+              <p>Все добавленные книги по алфавиту</p>
+              <span>Нажмите на книгу, чтобы открыть её редактор</span>
+            </div>
+            <div class="stage-book-grid" id="stageBookList"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="authDialog">
+      <form method="dialog" id="authForm">
+        <button class="dialog-close" value="cancel" aria-label="Закрыть">
+          ×
+        </button>
+        <div class="dialog-mark">⌑</div>
+        <h2>Ваша личная полка</h2>
+        <p>
+          Введите имя и пароль. Для этого прототипа данные хранятся только в
+          вашем браузере.
+        </p>
+        <label
+          >Имя пользователя<input
+            id="username"
+            class="text-input"
+            autocomplete="username"
+            required
+            minlength="2"
+            maxlength="20"
+        /></label>
+        <label
+          >Пароль<input
+            id="password"
+            class="text-input"
+            type="password"
+            autocomplete="current-password"
+            required
+            minlength="4"
+        /></label>
+        <button class="primary-button" value="default" type="submit">
+          Войти или создать полку
+        </button>
+      </form>
+    </dialog>
+
+    <dialog id="libraryNameDialog">
+      <form method="dialog" id="libraryNameForm">
+        <button class="dialog-close" value="cancel" aria-label="Закрыть">
+          ×
+        </button>
+        <div class="dialog-mark">📚</div>
+        <h2>Название библиотеки</h2>
+        <p>Выберите маленький знак для шапки и напишите название полки.</p>
+        <label
+          >Эмодзи<input
+            id="libraryEmoji"
+            class="text-input"
+            maxlength="2"
+            value="📚"
+        /></label>
+        <div class="emoji-preset-row" aria-label="Быстрый выбор эмодзи">
+          <button type="button" data-library-emoji="📚">📚</button>
+          <button type="button" data-library-emoji="📖">📖</button>
+          <button type="button" data-library-emoji="☕">☕</button>
+          <button type="button" data-library-emoji="🌙">🌙</button>
+          <button type="button" data-library-emoji="✨">✨</button>
+        </div>
+        <label
+          >Текст<input
+            id="libraryTitleInput"
+            class="text-input"
+            required
+            maxlength="36"
+        /></label>
+        <button class="primary-button" value="default" type="submit">
+          Сохранить
+        </button>
+      </form>
+    </dialog>
+
+    <dialog id="confirmDialog">
+      <form method="dialog" id="confirmForm">
+        <button class="dialog-close" value="cancel" aria-label="Закрыть">
+          ×
+        </button>
+        <div class="dialog-mark">?</div>
+        <h2 id="confirmTitle">Подтвердить действие</h2>
+        <p id="confirmText">Вы уверены?</p>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="confirmCancelBtn" value="cancel" type="button">
+            Отмена
+          </button>
+          <button class="primary-button danger-confirm" id="confirmOkBtn" value="default" type="submit">
+            Да
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
